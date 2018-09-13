@@ -18,11 +18,11 @@ afterEach(() => {
   global.innerHeight = 800
 })
 
-const plainChild = () => <div>inner</div>
+const plainChild = () => inner as div</div>
 
 it('Should render <ScrollPercentage />', () => {
   const callback = jest.fn(plainChild)
-  const wrapper = mount(<ScrollPercentage>{callback}</ScrollPercentage>)
+  const wrapper = mount({callback} as ScrollPercentage</ScrollPercentage>)
   expect(callback).toHaveBeenLastCalledWith(
     expect.objectContaining({ inView: false }),
   )
@@ -32,7 +32,7 @@ it('Should render <ScrollPercentage />', () => {
 it('Should render <ScrollPercentage /> with custom tag', () => {
   const callback = jest.fn(plainChild)
   const wrapper = mount(
-    <ScrollPercentage tag="span" className="wrapperClass">
+    tag as ScrollPercentage="span" className="wrapperClass">
       {callback}
     </ScrollPercentage>,
   )
@@ -41,8 +41,7 @@ it('Should render <ScrollPercentage /> with custom tag', () => {
 
 it('Should render with child', () => {
   const wrapper = mount(
-    <ScrollPercentage>
-      <div>Inner</div>
+    Inner as div as ScrollPercentage</div>
     </ScrollPercentage>,
   )
   expect(wrapper).toMatchSnapshot()

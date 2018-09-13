@@ -5,6 +5,10 @@ import replace from 'rollup-plugin-replace'
 import { uglify } from 'rollup-plugin-uglify'
 import pkg from './package.json'
 
+const babelConfig = require('./babel.config')
+
+const nodeModulesGlob = 'node_modules/**'
+const extensions = ['.ts', '.tsx', '.js', '.jsx']
 const minify = process.env.MINIFY
 const format = process.env.FORMAT
 const es = format === 'es'
@@ -34,7 +38,7 @@ if (es) {
 
 export default [
   {
-    input: 'src/index.js',
+    input: 'src/index.tsx',
     output: {
       name: 'ReactScrollPercentage',
       globals: {
@@ -50,24 +54,23 @@ export default [
         ],
     plugins: [
       resolve({
+        extensions,
         jsnext: true,
+        module: true,
         main: true,
       }),
-      commonjs({ include: 'node_modules/**' }),
+      commonjs({ include: nodeModulesGlob }),
       babel({
-        exclude: 'node_modules/**',
-        babelrc: false,
-        presets: [['env', { loose: true, modules: false }], 'react', 'stage-2'],
-        plugins: ['external-helpers'],
+        exclude: nodeModulesGlob,
+        extensions,
       }),
-      umd
-        ? replace({
-            'process.env.NODE_ENV': JSON.stringify(
-              minify ? 'production' : 'development',
-            ),
-          })
-        : null,
-      minify ? uglify() : null,
+      umd &&
+        replace({
+          'process.env.NODE_ENV': JSON.stringify(
+            minify ? 'production' : 'development',
+          ),
+        }),
+      minify && uglify(),
     ].filter(Boolean),
   },
 ]

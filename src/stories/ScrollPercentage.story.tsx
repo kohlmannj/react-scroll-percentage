@@ -1,19 +1,21 @@
-// @flow
-import * as React from 'react'
-import { storiesOf } from '@storybook/react'
+/* tslint:disable no-implicit-dependencies */
 import { action } from '@storybook/addon-actions'
-import ScrollPercentage from '../src/index'
+import { storiesOf } from '@storybook/react'
+/* tslint:enable no-implicit-dependencies */
+import React, { forwardRef, ReactNode } from 'react'
+import ScrollPercentage from '..'
+
 import ScrollWrapper from './ScrollWrapper'
 
-const calcPercentage = percentage => Math.floor(percentage * 100)
-type Props = {
-  style?: Object,
-  children?: React.Node,
-  threshold?: number,
+const calcPercentage = (percentage: number) => Math.floor(percentage * 100)
+
+interface IProps {
+  style?: object
+  children?: ReactNode
+  threshold?: number
 }
 
-// $FlowFixMe forwardRef is not known by Flow
-const Header = React.forwardRef((props: Props) => (
+const Header = forwardRef((props: IProps) => (
   <div
     style={{
       display: 'flex',
@@ -63,35 +65,35 @@ storiesOf('Scroll Percentage', module)
     <ScrollWrapper>
       <ScrollPercentage threshold={0}>
         {({ percentage }) => (
-          <Header threshold="0">
+          <Header threshold={0}>
             {`Percentage scrolled: ${calcPercentage(percentage)}%.`}
           </Header>
         )}
       </ScrollPercentage>
       <ScrollPercentage threshold={0.25}>
         {({ percentage }) => (
-          <Header style={{ background: 'slategrey' }} threshold="25">
+          <Header style={{ background: 'slategrey' }} threshold={25}>
             {`Percentage scrolled: ${calcPercentage(percentage)}%.`}
           </Header>
         )}
       </ScrollPercentage>
       <ScrollPercentage threshold={0.5}>
         {({ percentage }) => (
-          <Header style={{ background: 'plum' }} threshold="50">
+          <Header style={{ background: 'plum' }} threshold={50}>
             {`Percentage scrolled: ${calcPercentage(percentage)}%.`}
           </Header>
         )}
       </ScrollPercentage>
       <ScrollPercentage threshold={0.75}>
         {({ percentage }) => (
-          <Header style={{ background: 'lightseagreen' }} threshold="75">
+          <Header style={{ background: 'lightseagreen' }} threshold={75}>
             {`Percentage scrolled: ${calcPercentage(percentage)}%.`}
           </Header>
         )}
       </ScrollPercentage>
       <ScrollPercentage threshold={1}>
         {({ percentage }) => (
-          <Header style={{ background: 'cornflowerblue' }} threshold="100">
+          <Header style={{ background: 'cornflowerblue' }} threshold={100}>
             {`Percentage scrolled: ${calcPercentage(percentage)}%.`}
           </Header>
         )}

@@ -1,9 +1,10 @@
-// @flow
+export type WatcherCallback = () => void
+
 let isMonitoring: boolean = false
 let isScrolling: boolean = false
-let watchers: Set<Function> = new Set()
+const watchers: Set<WatcherCallback> = new Set()
 
-function onScroll(e) {
+function onScroll() {
   if (!isScrolling) {
     isScrolling = true
     requestAnimationFrame(update)
@@ -30,14 +31,18 @@ function stop() {
   }
 }
 
-export function watch(cb: Function) {
-  if (!isMonitoring) start()
+export function watch(cb: WatcherCallback) {
+  if (!isMonitoring) {
+    start()
+  }
   watchers.add(cb)
 }
 
-export function unwatch(cb: Function) {
+export function unwatch(cb: WatcherCallback) {
   watchers.delete(cb)
-  if (!watchers.size) stop()
+  if (!watchers.size) {
+    stop()
+  }
 }
 
 export function destroy() {
