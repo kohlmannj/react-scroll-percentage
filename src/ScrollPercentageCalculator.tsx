@@ -4,12 +4,12 @@ import {
 } from '@kohlmannj/react-intersection-observer'
 import { expandShorthandProperty } from 'css-property-parser'
 import { PureComponent } from 'react'
-import { IScrollPercentageOwnProps } from '.'
 import { unwatch, watch } from './scroll'
+import { IScrollPercentageObserverOwnProps } from './ScrollPercentageObserver'
 
 export type ScrollPercentageCalculatorProps = IntersectionObserverRenderProps &
   Pick<IntersectionObserverProps, 'rootMargin' | 'root' | 'threshold'> &
-  IScrollPercentageOwnProps
+  IScrollPercentageObserverOwnProps
 
 export interface IScrollPercentageCalculatorState {
   percentage: number
@@ -24,7 +24,7 @@ export interface IScrollPercentageCalculatorState {
  * )}
  * </ScrollPercentage>
  */
-class ScrollPercentageCalculator extends PureComponent<
+export class ScrollPercentageCalculator extends PureComponent<
   ScrollPercentageCalculatorProps,
   IScrollPercentageCalculatorState
 > {
@@ -133,5 +133,3 @@ class ScrollPercentageCalculator extends PureComponent<
       : children
   }
 }
-
-export default ScrollPercentageCalculator

@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import ScrollPercentage from '../src/index.js'
+import { ScrollPercentageObserver } from '..'
 
 jest.mock('invariant')
 

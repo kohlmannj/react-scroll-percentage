@@ -3,30 +3,32 @@ import Observer, {
   IntersectionObserverRenderProps,
 } from '@kohlmannj/react-intersection-observer'
 import React, { createRef, PureComponent, ReactNode } from 'react'
-import ScrollPercentageCalculator from './ScrollPercentageCalculator'
+import { ScrollPercentageCalculator } from './ScrollPercentageCalculator'
 
-export interface IScrollPercentageRenderProps
+export interface IScrollPercentageObserverRenderProps
   extends IntersectionObserverRenderProps {
   percentage: number
 }
 
-export interface IScrollPercentageOwnProps {
+export interface IScrollPercentageObserverOwnProps {
   /** Children should be either a function or a node */
-  children?: ReactNode | ((fields: IScrollPercentageRenderProps) => ReactNode)
+  children?:
+    | ReactNode
+    | ((fields: IScrollPercentageObserverRenderProps) => ReactNode)
   /** Call this function whenever the percentage changes */
   onChange?: (percentage: number, inView: boolean) => void
 }
 
-export type ScrollPercentageProps = Pick<
+export type ScrollPercentageObserverProps = Pick<
   IntersectionObserverProps,
   Exclude<keyof IntersectionObserverProps, 'children' | 'onChange'>
 > &
-  IScrollPercentageOwnProps
+  IScrollPercentageObserverOwnProps
 
 // TODO: convert to Stateless Functional Component (SFC)
 /** @see https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28249 */
-export default class ScrollPercentage extends PureComponent<
-  ScrollPercentageProps
+export class ScrollPercentageObserver extends PureComponent<
+  ScrollPercentageObserverProps
 > {
   public static defaultProps = {
     forwardedRef: createRef<any>(),
