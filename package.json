@@ -71,7 +71,7 @@
     ]
   },
   "peerDependencies": {
-    "@kohlmannj/react-intersection-observer": "^7.0.0 || ^7.0.0-alpha.0",
+    "@kohlmannj/react-intersection-observer": "^7.0.0 || ^7.0.0-alpha.1",
     "css-property-parser": "^1.0.6",
     "invariant": "^2.2.4",
     "react": "^16.3.0 || ^17.0.0"
@@ -93,7 +93,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.0.0",
     "@babel/runtime": "^7.0.0",
-    "@kohlmannj/react-intersection-observer": "^7.0.0 || ^7.0.0-alpha.0",
+    "@kohlmannj/react-intersection-observer": "^7.0.0 || ^7.0.0-alpha.1",
     "@storybook/addon-actions": "^4.0.0 || ^4.0.0-alpha.21",
     "@storybook/addon-options": "^4.0.0 || ^4.0.0-alpha.21",
     "@storybook/react": "^4.0.0 || ^4.0.0-alpha.21",

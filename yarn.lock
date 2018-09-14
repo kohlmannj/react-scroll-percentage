@@ -975,9 +975,9 @@
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.1.2.tgz#4e4afffc61fb82fd0e55a4ed3c3041fd0a765a5a"
 
-"@kohlmannj/react-intersection-observer@^7.0.0 || ^7.0.0-alpha.0":
-  version "7.0.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@kohlmannj/react-intersection-observer/-/react-intersection-observer-7.0.0-alpha.0.tgz#a14d6da330e599ba046eb1ff46f083d204ffdb0a"
+"@kohlmannj/react-intersection-observer@^7.0.0 || ^7.0.0-alpha.1":
+  version "7.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@kohlmannj/react-intersection-observer/-/react-intersection-observer-7.0.0-alpha.1.tgz#0d78aad65c5279fce834b88366a9ee0d103c54f9"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
