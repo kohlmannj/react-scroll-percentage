@@ -44,11 +44,11 @@ export class ScrollPercentageCalculator extends PureComponent<
     rootMargin: IntersectionObserverProps['rootMargin'],
     threshold: number = 0,
   ): number {
+    // @ts-ignore
     const parsedRootMargin = expandShorthandProperty(
       'margin',
       rootMargin || '0px',
     )
-    console.log(parsedRootMargin)
 
     const vh = ScrollPercentageCalculator.viewportHeight()
     const offsetTop = threshold * vh * 0.25
