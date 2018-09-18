@@ -46,6 +46,9 @@ export default [
       },
       ...output,
     },
+    watch: {
+      chokidar: true,
+    },
     external: umd
       ? Object.keys(pkg.peerDependencies || {})
       : [
