@@ -74,6 +74,9 @@ export class ScrollPercentageCalculator extends PureComponent<
   public componentDidMount() {
     // Start by updating the scroll position, so it correctly reflects the elements start position
     this.handleScroll()
+    if (this.props.inView) {
+      this.monitorScroll(this.props.inView)
+    }
   }
 
   public componentDidUpdate(
