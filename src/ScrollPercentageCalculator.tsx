@@ -2,8 +2,8 @@ import {
   IntersectionObserverProps,
   IntersectionObserverRenderProps,
 } from '@kohlmannj/react-intersection-observer'
-import { expandShorthandProperty } from 'css-property-parser'
 import { PureComponent } from 'react'
+import { parseRootMargin } from './parseRootMargin'
 import { unwatch, watch } from './scroll'
 import { IScrollPercentageObserverOwnProps } from './ScrollPercentageObserver'
 
@@ -39,20 +39,36 @@ export class ScrollPercentageCalculator extends PureComponent<
     return window.parent ? window.parent.innerHeight : window.innerHeight || 0
   }
 
+  public static getRootMarginOffsetTerm(
+    { value, unit }: { value: number; unit: string },
+    length: number,
+  ) {
+    switch (unit) {
+      case 'px':
+        return value
+      case '%':
+        return (value / 100) * length
+      default:
+        throw new Error(`'${unit}' units not supported`)
+    }
+  }
+
   public static calculatePercentage(
     bounds: ClientRect,
     rootMargin: IntersectionObserverProps['rootMargin'],
     threshold: number = 0,
   ): number {
-    // @ts-ignore
-    const parsedRootMargin = expandShorthandProperty(
-      'margin',
-      rootMargin || '0px',
-    )
+    const parsedRootMargin = parseRootMargin(rootMargin)
+    const rootMarginTop = parsedRootMargin[0]
+    const rootMarginBottom = parsedRootMargin[2]
 
     const vh = ScrollPercentageCalculator.viewportHeight()
-    const offsetTop = threshold * vh * 0.25
-    const offsetBottom = threshold * vh * 0.25
+    const offsetTop =
+      threshold * vh * 0.25 -
+      ScrollPercentageCalculator.getRootMarginOffsetTerm(rootMarginTop, vh)
+    const offsetBottom =
+      threshold * vh * 0.25 -
+      ScrollPercentageCalculator.getRootMarginOffsetTerm(rootMarginBottom, vh)
 
     return (
       1 -
@@ -88,6 +104,16 @@ export class ScrollPercentageCalculator extends PureComponent<
       (prevState.percentage !== this.state.percentage ||
         prevProps.inView !== this.props.inView)
     ) {
+      // const transitionedToOffScreenButNeedsPercentageUpdate =
+      //   !!prevProps.inView &&
+      //   !this.props.inView &&
+      //   this.state.percentage > 0 &&
+      //   this.state.percentage < 1
+
+      // if (transitionedToOffScreenButNeedsPercentageUpdate) {
+      //   console.log({ transitionedToOffScreenButNeedsPercentageUpdate })
+      // }
+
       this.props.onChange(this.state.percentage, this.props.inView)
     }
 
@@ -104,6 +130,15 @@ export class ScrollPercentageCalculator extends PureComponent<
     if (enable) {
       watch(this.handleScroll)
     } else {
+      // Call handleScroll() an additional time to cover an edge case affecting the call to
+      // this.props.onChange() when we transition from in-view to out-of-view, but
+      // this.state.percentage isn't yet equal to 0 or 1
+      if (this.state.percentage > 0 && this.state.percentage < 1) {
+        console.log(
+          'Calling handleScroll() an additional time to update this.stage.percentage after transitioning from in-view to out-of-view',
+        )
+        this.handleScroll()
+      }
       unwatch(this.handleScroll)
     }
   }
