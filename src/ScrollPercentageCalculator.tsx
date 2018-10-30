@@ -5,7 +5,10 @@ import {
 import { PureComponent } from 'react'
 import { parseRootMargin } from './parseRootMargin'
 import { unwatch, watch } from './scroll'
-import { IScrollPercentageObserverOwnProps } from './ScrollPercentageObserver'
+import {
+  IScrollPercentageObserverOwnProps,
+  ScrollPercentageObserverRenderFunction,
+} from './ScrollPercentageObserver'
 
 export type ScrollPercentageCalculatorProps = IntersectionObserverRenderProps &
   Pick<IntersectionObserverProps, 'rootMargin' | 'root' | 'threshold'> &
@@ -13,6 +16,7 @@ export type ScrollPercentageCalculatorProps = IntersectionObserverRenderProps &
 
 export interface IScrollPercentageCalculatorState {
   percentage: number
+  percentageOfViewport: number
 }
 
 /**
@@ -53,11 +57,11 @@ export class ScrollPercentageCalculator extends PureComponent<
     }
   }
 
-  public static calculatePercentage(
+  public static calculatePercentages(
     bounds: ClientRect,
     rootMargin: IntersectionObserverProps['rootMargin'],
     threshold: number = 0,
-  ): number {
+  ): IScrollPercentageCalculatorState {
     const parsedRootMargin = parseRootMargin(rootMargin)
     const rootMarginTop = parsedRootMargin[0]
     const rootMarginBottom = parsedRootMargin[2]
@@ -70,7 +74,7 @@ export class ScrollPercentageCalculator extends PureComponent<
       threshold * vh * 0.25 -
       ScrollPercentageCalculator.getRootMarginOffsetTerm(rootMarginBottom, vh)
 
-    return (
+    const percentage =
       1 -
       Math.max(
         0,
@@ -80,11 +84,25 @@ export class ScrollPercentageCalculator extends PureComponent<
             (vh + bounds.height - offsetBottom - offsetTop),
         ),
       )
+
+    const lowestTopEdge = Math.max(offsetTop, bounds.top)
+    const highestBottomEdge = Math.min(vh - offsetBottom, bounds.bottom)
+    const effectiveViewportHeight = 0 - offsetTop + vh - offsetBottom
+
+    const percentageOfViewport: number = Math.max(
+      0,
+      Math.min(
+        1,
+        (highestBottomEdge - lowestTopEdge) / effectiveViewportHeight,
+      ),
     )
+
+    return { percentage, percentageOfViewport }
   }
 
-  public state = {
+  public state: IScrollPercentageCalculatorState = {
     percentage: 0,
+    percentageOfViewport: 0,
   }
 
   public componentDidMount() {
@@ -114,7 +132,7 @@ export class ScrollPercentageCalculator extends PureComponent<
       //   console.log({ transitionedToOffScreenButNeedsPercentageUpdate })
       // }
 
-      this.props.onChange(this.state.percentage, this.props.inView)
+      this.props.onChange({ ...this.state, inView: this.props.inView })
     }
 
     if (prevProps.inView !== this.props.inView) {
@@ -151,7 +169,10 @@ export class ScrollPercentageCalculator extends PureComponent<
     }
 
     const bounds = forwardedRef.current.getBoundingClientRect()
-    const percentage = ScrollPercentageCalculator.calculatePercentage(
+    const {
+      percentage,
+      percentageOfViewport,
+    } = ScrollPercentageCalculator.calculatePercentages(
       bounds,
       rootMargin,
       threshold,
@@ -160,14 +181,25 @@ export class ScrollPercentageCalculator extends PureComponent<
     if (percentage !== this.state.percentage) {
       this.setState({ percentage })
     }
+
+    if (percentageOfViewport !== this.state.percentageOfViewport) {
+      this.setState({ percentageOfViewport })
+    }
   }
 
   public render() {
     const { children, inView, forwardedRef } = this.props
-    const { percentage } = this.state
+    const { percentage, percentageOfViewport } = this.state
 
-    return typeof children === 'function'
-      ? children({ inView, forwardedRef, percentage })
-      : children
+    return (
+      (typeof children === 'function'
+        ? (children as ScrollPercentageObserverRenderFunction)({
+            inView,
+            forwardedRef,
+            percentage,
+            percentageOfViewport,
+          })
+        : children) || null
+    )
   }
 }

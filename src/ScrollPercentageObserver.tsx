@@ -3,20 +3,24 @@ import Observer, {
   IntersectionObserverRenderProps,
 } from '@kohlmannj/react-intersection-observer'
 import React, { createRef, PureComponent, ReactNode } from 'react'
-import { ScrollPercentageCalculator } from './ScrollPercentageCalculator'
+import {
+  IScrollPercentageCalculatorState,
+  ScrollPercentageCalculator,
+} from './ScrollPercentageCalculator'
 
 export interface IScrollPercentageObserverRenderProps
-  extends IntersectionObserverRenderProps {
-  percentage: number
-}
+  extends IntersectionObserverRenderProps,
+    IScrollPercentageCalculatorState {}
+
+export type ScrollPercentageObserverRenderFunction = ((
+  fields: IScrollPercentageObserverRenderProps,
+) => ReactNode)
 
 export interface IScrollPercentageObserverOwnProps {
   /** Children should be either a function or a node */
-  children?:
-    | ReactNode
-    | ((fields: IScrollPercentageObserverRenderProps) => ReactNode)
+  children?: ReactNode | ScrollPercentageObserverRenderFunction
   /** Call this function whenever the percentage changes */
-  onChange?: (percentage: number, inView: boolean) => void
+  onChange?: (props: IScrollPercentageCalculatorState & { inView: boolean }) => void
 }
 
 export type ScrollPercentageObserverProps = Pick<
