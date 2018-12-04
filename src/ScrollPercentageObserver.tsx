@@ -20,7 +20,11 @@ export interface IScrollPercentageObserverOwnProps {
   /** Children should be either a function or a node */
   children?: ReactNode | ScrollPercentageObserverRenderFunction
   /** Call this function whenever the percentage changes */
-  onChange?: (props: IScrollPercentageCalculatorState & { inView: boolean }) => void
+  onChange?: (
+    percentage: IScrollPercentageCalculatorState['percentage'],
+    inView: boolean,
+    percentageOfViewport: IScrollPercentageCalculatorState['percentageOfViewport'],
+  ) => void
 }
 
 export type ScrollPercentageObserverProps = Pick<

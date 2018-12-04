@@ -132,7 +132,11 @@ export class ScrollPercentageCalculator extends PureComponent<
       //   console.log({ transitionedToOffScreenButNeedsPercentageUpdate })
       // }
 
-      this.props.onChange({ ...this.state, inView: this.props.inView })
+      this.props.onChange(
+        this.state.percentage,
+        this.props.inView,
+        this.state.percentageOfViewport,
+      )
     }
 
     if (prevProps.inView !== this.props.inView) {
