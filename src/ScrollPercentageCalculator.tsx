@@ -168,7 +168,7 @@ export class ScrollPercentageCalculator extends PureComponent<
   public handleScroll = () => {
     const { forwardedRef, rootMargin, threshold } = this.props
 
-    if (!forwardedRef) {
+    if (!forwardedRef || !forwardedRef.current) {
       return
     }
 
