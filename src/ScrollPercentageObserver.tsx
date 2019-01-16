@@ -54,7 +54,6 @@ export class ScrollPercentageObserver extends PureComponent<
       forwardedRef: forwardedRefProp,
       threshold,
       triggerOnce,
-      importPolyfill,
     } = this.props
 
     return (
@@ -65,7 +64,6 @@ export class ScrollPercentageObserver extends PureComponent<
         rootMargin={rootMargin}
         threshold={threshold}
         triggerOnce={triggerOnce}
-        importPolyfill={importPolyfill}
       >
         {({ inView, forwardedRef }) => (
           <ScrollPercentageCalculator
