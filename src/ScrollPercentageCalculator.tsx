@@ -156,9 +156,9 @@ export class ScrollPercentageCalculator extends PureComponent<
       // this.props.onChange() when we transition from in-view to out-of-view, but
       // this.state.percentage isn't yet equal to 0 or 1
       if (this.state.percentage > 0 && this.state.percentage < 1) {
-        console.log(
-          'Calling handleScroll() an additional time to update this.stage.percentage after transitioning from in-view to out-of-view',
-        )
+        // console.log(
+        //   'Calling handleScroll() an additional time to update this.state.percentage after transitioning from in-view to out-of-view',
+        // )
         this.handleScroll()
       }
       unwatch(this.handleScroll)
